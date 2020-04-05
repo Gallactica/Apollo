@@ -1,0 +1,8 @@
+{
+  "name": "apollo",
+  "version": "1.0.0",
+  "description": "Template Engine",
+  "main": "index.js",
+  "author": "gallactica",
+  "license": "MIT"
+}
