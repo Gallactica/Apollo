@@ -4,6 +4,25 @@ NodeJS Шаблонизатор HTML
 ```js
 const apollo = require('./index.js')
 ```
+
+--------------------
+## Пример
+> hello.html
+```html
+<h1>Привет {{title}}</h1>
+```
+> index.js
+```js
+const apollo = require('./index.js')
+const template = require('fs').readFileSync('./hello.html', 'utf-8')
+
+const result = apollo.render(template, {
+    title: "Галактика"
+})
+
+ console.log(result)
+```
+
 --------------------
 ## Установка шаблона
 ```js
