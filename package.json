@@ -2,7 +2,7 @@
   "name": "apollo",
   "version": "1.0.0",
   "description": "Template Engine",
-  "main": "index.js",
+  "main": "apollo.js",
   "author": "gallactica",
   "license": "MIT"
 }

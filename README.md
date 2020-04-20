@@ -1,64 +1,104 @@
 # Apollo
-NodeJS Шаблонизатор HTML
+NodeJS/Browser Async HTML Шаблонизатор
 
+### Node.JS
 ```js
-const apollo = require('./index.js')
+const apollo = require('./apollo.js')
+```
+### Браузер
+```html
+<script src="apollo.js"></script>
 ```
 
 --------------------
 ## Пример
-> hello.html
+##### hello.html
+
 ```html
 <h1>Привет {{title}}</h1>
 ```
-> index.js
+##### index.js
+
 ```js
-const apollo = require('./index.js')
-const template = require('fs').readFileSync('./hello.html', 'utf-8')
+// Строка ниже только для Node.JS
+const Apollo = require('./apollo.js')
 
-const result = apollo.render(template, {
+Apollo.render("hello.html", {
     title: "Галактика"
-})
+}).then(html => console.log(html))
+```
 
- console.log(result)
+##### Шаблонизация
+Внутри параметра имеет
+```
+_: Текущие параметры
+isBrowser: Флаг текущего окружения 
+include: (name, data) Рендер других шаблонов в текущем
+// Наш заданный параметр
+title: "Галактика" 
 ```
 
 --------------------
-## Установка шаблона
+## Использование
+### Вложенность
+##### template.html
+Текущие параметры передаются другому шаблону
 ```js
-apollo.set(name, html)
+render("template.html", { name: "Галактика" })
 ```
-## Получение шаблона
-```js
-apollo.get(name)
+```html
+<h1>{{name}}</h1> 		 <!-- <h1>Галактика</h1> -->
+{{ include("item.html") }} <!-- <h3>Галактика</h3> -->
 ```
-## Получение всех шаблонов
-```js
-apollo.getAll()
+##### item.html
+```html
+<h3>{{name}}</h3> <!-- <h3>Галактика</h3> -->
 ```
-## Удаление шаблона
+
+### Параметры
+Кэширование шаблонов. 
+>По умолчанию стоит `false`
+
 ```js
-apollo.remove(name)
+Apollo.cache = true || false
 ```
-## Очистка шаблонов
+Управление кэшированными шаблонами
 ```js
-apollo.clear()
+// Получить шаблон
+Apollo.templates.get(name)
+// Установить шаблон
+Apollo.templates.get(name, html)
+// Существование шаблона
+Apollo.templates.exists(name)
+// Удалить шаблон
+Apollo.templates.remove(name)
+// Сбросить все шаблоны
+Apollo.templates.reset()
 ```
-## Рендер HTML
+Флаг браузера возвращает `true` или `false`
 ```js
-apollo.render(html, data)
+Apollo.isBrowser 
 ```
-## Рендер шаблона
+### Рендер
 ```js
-apollo.renderTemplate(name, data)
+// name: Название шаблона
+// data: Объект с информацией
+Apollo.render(name, data)
+	.then(html => {})
 ```
-## Компиляция HTML
+### Запрос шаблона
+Запрашивает путь шаблона перед запросом
 ```js
-const result = apollo.compile(html)
-result(data)
+// name: Название шаблона
+Apollo.requestTemplate(name)
+	.then(html => {})
 ```
-## Компиляция шаблона
+### Путь шаблона
+Можно изменить для собственных путей шаблонов
 ```js
-const result = apollo.compileTemplate(name)
-result(data)
+// name: Название шаблона
+// input.html => input.html
+Apollo.requestPath(name)
+// input => input.html
+Apollo.requestPath = (name) => name + '.html'
 ```
