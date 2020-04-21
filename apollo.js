@@ -49,14 +49,14 @@ const Apollo = {
 
         var name = [],
             value = [],
-            re = /{{([^}}]*)?}}/g,
-            reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,
-            code = 'return new Promise(async (resolve, reject) => {var r=[];\n',
+            re = /\{\|(.+?)\|\}/g,
+            reExp = /(^( )?(if|for|.+?\.forEach|else|switch|case|break|{|}))(.*)?/g,
+            code = 'return new Promise(async (resolve, reject) => {var r=[];',
             cursor = 0,
             match
 
         Object.assign(data, {
-            _: data,
+            local: data,
             include: Apollo.render,
             isBrowser
         })
@@ -66,10 +66,21 @@ const Apollo = {
                 name.push(k)
                 value.push(data[k])
             }
+
         var add = function (line, js) {
-            if (/include\((.*?)\)/g.exec(line)) line = line.replace(/include\((.*?)\)/g, (t, c) => 'await include(' + (c.split(',')[1] != undefined ? c : c) + ', _') + ')'
-            js ? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
-                (code += line != '' ? 'r.push(`' + line.replace(/"/g, '\\"') + '`);\n' : '')
+            if (/include\((.*?)\)/g.exec(line)) line = line.replace(/include\((.*?)\)/g, (t, c) => 'await include(' + (c.split(',')[1] != undefined ? c : c) + ',local') + ')'
+
+            if (js) {
+                if (line.match(reExp)) {
+                    code += line + (!line.endsWith(';') ? ';' : '') + '\n'
+                } else {
+                    code += 'r.push(' + line + ');\n'
+                }
+            } else {
+                if (line.trim() == '') return add
+                code += 'r.push(`' + line.replace(/"/g, '\\"') + '`);'
+            }
+
             return add
         }
 
@@ -81,9 +92,9 @@ const Apollo = {
         add(html.substr(cursor, html.length - cursor))
         code += 'resolve(r.join(""));})'
 
-        const result = await new Function(name, code.replace(/[\r\t\n]/g, '')).apply(this, value)
+        const result = await new Function(name, code).apply(this, value)
 
-        return result
+        return result.split('\n').filter(value => value.trim() != "").join('\n')
     }
 }
 
