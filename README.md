@@ -7,7 +7,7 @@ const apollo = require('./apollo.js')
 ```
 ### Браузер
 ```html
-<script src="apollo.js"></script>
+<script src="https://gallactica.github.io/Apollo/apollo.js"></script>
 ```
 
 --------------------
