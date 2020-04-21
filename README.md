@@ -62,6 +62,12 @@ render("template.html", { name: "Галактика" })
 ```js
 Apollo.cache = true || false
 ```
+Возвращение элемента или массива элементов (в браузере).
+>По умолчанию стоит `true`
+
+```js
+Apollo.returnElement = true || false
+```
 Управление кэшированными шаблонами
 ```js
 // Получить шаблон

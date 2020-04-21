@@ -16,6 +16,7 @@ function getFileNode(path) {
 const Apollo = {
     isBrowser,
     cache: false,
+    returnElement: true,
     templates: {
         _data: {},
         set: function (key, val) {
@@ -36,6 +37,14 @@ const Apollo = {
     },
     requestPath(name) {
         return name
+    },
+    renderResult(html) {
+        if (isBrowser == true && Apollo.returnElement == true) {
+            const div = document.createElement('div')
+            div.innerHTML = html
+            return div.children.length > 1 ? div.children : div.children[0]
+        }
+        return html
     },
     async requestTemplate(name) {
         if (Apollo.cache == true && Apollo.templates.exists(name) == true) return Apollo.templates.get(name)
@@ -94,7 +103,7 @@ const Apollo = {
 
         const result = await new Function(name, code).apply(this, value)
 
-        return result.split('\n').filter(value => value.trim() != "").join('\n')
+        return Apollo.renderResult(result.split('\n').filter(value => value.trim() != "").join('\n'))
     }
 }
 
