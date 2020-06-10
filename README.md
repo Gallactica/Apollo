@@ -15,7 +15,7 @@ const apollo = require('./apollo.js')
 ##### hello.html
 
 ```html
-<h1>Привет {|title|}</h1>
+<h1>Привет {{title}}</h1>
 ```
 ##### index.js
 
@@ -47,12 +47,12 @@ title: "Галактика"
 render("template.html", { name: "Галактика" })
 ```
 ```html
-<h1>{|name|}</h1> 		 <!-- <h1>Галактика</h1> -->
-{| include("item.html") |} <!-- <h3>Галактика</h3> -->
+<h1>{{name}}</h1> 		 <!-- <h1>Галактика</h1> -->
+{{ include("item.html") }} <!-- <h3>Галактика</h3> -->
 ```
 ##### item.html
 ```html
-<h3>{|name|}</h3> <!-- <h3>Галактика</h3> -->
+<h3>{{name}}</h3> <!-- <h3>Галактика</h3> -->
 ```
 
 ### Параметры

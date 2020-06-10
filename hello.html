@@ -1,8 +1,8 @@
 <div class="greeting">
-    <h1>Привет {| title |}</h1>
+    <h1>Привет {{ title }}</h1>
     <ul>
-        {| count.forEach(value => { |}
-        <li>{| value |}</li>
-        {| }) |}
+        {{ count.forEach(value => { }}
+        <li>{{ value }}</li>
+        {{ }) }}
     </ul>
 </div>

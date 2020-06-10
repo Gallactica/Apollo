@@ -58,8 +58,8 @@ const Apollo = {
 
         var name = [],
             value = [],
-            re = /\{\|(.+?)\|\}/g,
-            reExp = /(^( )?(if|for|.+?\.forEach|else|switch|case|break|{|}))(.*)?/g,
+            re = /\{\{(.+?)\}\}/g,
+            reExp = /(^( )?(if|for|.+?\.forEach|else|switch|case|break|{{}))(.*)?/g,
             code = 'return new Promise(async (resolve, reject) => {var r=[];',
             cursor = 0,
             match
